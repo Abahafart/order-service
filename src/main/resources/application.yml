@@ -8,6 +8,11 @@ server:
 spring:
   application:
     name: order-service
+  flyway:
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    url: jdbc:postgresql://localhost:5432/polardb_order
+    baseline-on-migrate: true
   r2dbc:
     username: user
     password: password
@@ -22,3 +27,6 @@ spring:
   lifecycle:
     #Grace period
     timeout-per-shutdown-phase: 15s
+
+catalog:
+  uri: http://localhost:9001
