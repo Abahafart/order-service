@@ -55,4 +55,18 @@ class BookClientTest {
         .expectNextMatches(b -> b.isbn().equals(isbn))
         .verifyComplete();
   }
+
+  @Test
+  void whenBookNotExistsThenReturnEmpty() {
+    String isbn = "1234567890";
+    MockResponse mockResponse = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setResponseCode(404);
+
+    mockWebServer.enqueue(mockResponse);
+
+    StepVerifier.create(bookClient.getBookByIsbn(isbn))
+        .expectNextCount(0)
+        .verifyComplete();
+  }
 }

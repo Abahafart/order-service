@@ -48,4 +48,11 @@ class OrderRepositoryR2dbcTests {
         .expectNextMatches(order -> order.status().equals(OrderStatus.REJECTED))
         .verifyComplete();
   }
+
+  @Test
+  void findOrderByIdWhenNotExisting() {
+    StepVerifier.create(orderRepository.findById(1596L))
+        .expectNextCount(0)
+        .verifyComplete();
+  }
 }
