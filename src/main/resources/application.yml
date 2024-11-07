@@ -24,6 +24,26 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         multiplier: 1.1
+    function:
+      #definition of the function managed by Spring Cloud Function
+      definition: dispatchOrder
+    stream:
+      bindings:
+        #The input binding
+        dispatchOrder-in-0:
+          #The actual name at the broker that the binder binds to (the exchange in rabbitmq)
+          destination: order-dispatched
+          #The consumer group interested in the destination (the same as the application name)
+          group: ${spring.application.name}
+        #Output binding created and managed by StreamBridge
+        acceptOrder-out-0:
+          #The actual name at the broker that the binder binds to (the exchange in RabbitMQ)
+          destination: order-accepted
+      rabbit:
+        bindings:
+          acceptOrder-out-0:
+            producer:
+              transacted: true
   config:
     import: "optional:configserver:"
   flyway:
@@ -45,6 +65,13 @@ spring:
   lifecycle:
     #Grace period
     timeout-per-shutdown-phase: 15s
+  #Configures the integrations with RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: password
+    connection-timeout: 5s
 
 catalog:
   uri: http://localhost:9001
